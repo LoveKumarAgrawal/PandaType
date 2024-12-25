@@ -1,0 +1,1 @@
+export const words = "Esse magnam qui numquam quasi animi porro ab culpa error autem sunt dolorum dolores atque cum dolor quos blanditiis".split(' ')
