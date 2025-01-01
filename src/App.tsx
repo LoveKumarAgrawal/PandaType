@@ -48,16 +48,16 @@ function App() {
 
     if (isBackspace) {
       if (currentLetter && isFirstLetter) {
-        removeClass(currentWord, 'current');
-        if (currentWord.previousSibling) {
-          addClass(currentWord.previousSibling, 'current');
+        const prevWord = currentWord.previousSibling;
+        const prevWordLastLetter = prevWord?.lastChild;
+
+        if (prevWord && prevWordLastLetter && !prevWordLastLetter.classList.contains('correct')) {
+          removeClass(currentWord, 'current');
+          addClass(prevWord, 'current');
           removeClass(currentLetter, 'current');
-          addClass(currentWord.previousSibling.lastChild, 'current');
-          removeClass(currentWord.previousSibling.lastChild, 'incorrect');
-          removeClass(currentWord.previousSibling.lastChild, 'correct');
-        } else {
-          addClass(currentWord, 'current');
-          addClass(currentLetter, 'current');
+          addClass(prevWordLastLetter, 'current');
+          removeClass(prevWordLastLetter, 'incorrect');
+          removeClass(prevWordLastLetter, 'correct');
         }
       } else if (currentLetter && !isFirstLetter) {
         removeClass(currentLetter, 'current');
