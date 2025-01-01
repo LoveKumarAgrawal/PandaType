@@ -6,13 +6,10 @@ body {
     background-color: #323437;
 }
 
-.caret {
-    animation: blink 0.7s infinite step-start;
-  }
-  
-  @keyframes blink {
-    50% {
-      background-color: transparent;
-    }
-  }
-  
+.correct {
+  color: green;
+}
+
+.incorrect {
+  color: red;
+}
