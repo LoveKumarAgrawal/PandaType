@@ -5,6 +5,7 @@ import { words } from './constants/sentence';
 function App() {
   const [time, setTime] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [correct, setCorrect] = useState(0);
 
   const handleKeyUp = (event: any) => {
     const key = event.key;
@@ -19,6 +20,7 @@ function App() {
     if (isLetter) {
       if (currentLetter) {
         addClass(currentLetter, key === expected ? 'correct' : 'incorrect');
+        if (key === expected) setCorrect(prev => prev + 1);
         removeClass(currentLetter, 'current');
         if (currentLetter.nextSibling) {
           addClass(currentLetter.nextSibling, 'current');
@@ -49,7 +51,7 @@ function App() {
     if (isBackspace) {
       if (currentLetter && isFirstLetter) {
         const prevWord = currentWord.previousSibling;
-        const prevWordLastLetter = prevWord?.lastChild;
+        const prevWordLastLetter = prevWord?.lastChild as HTMLElement;
 
         if (prevWord && prevWordLastLetter && !prevWordLastLetter.classList.contains('correct')) {
           removeClass(currentWord, 'current');
@@ -58,16 +60,26 @@ function App() {
           addClass(prevWordLastLetter, 'current');
           removeClass(prevWordLastLetter, 'incorrect');
           removeClass(prevWordLastLetter, 'correct');
+          setCorrect(prev => prev - 1);
         }
       } else if (currentLetter && !isFirstLetter) {
         removeClass(currentLetter, 'current');
         addClass(currentLetter.previousSibling, 'current');
         removeClass(currentLetter.previousSibling, 'incorrect');
         removeClass(currentLetter.previousSibling, 'correct');
+        setCorrect(prev => prev - 1);
       } else if (!currentLetter) {
         addClass(currentWord?.lastChild, 'current');
         removeClass(currentWord?.lastChild, 'incorrect');
         removeClass(currentWord?.lastChild, 'correct');
+        setCorrect(prev => prev - 1);
+      }
+
+      // Handle removal of extra characters when backspace is pressed
+      const extraLetter = currentWord?.querySelector('.letter.current.extra');
+      console.log(extraLetter)
+      if (extraLetter) {
+        extraLetter.remove();
       }
     }
   };
@@ -93,7 +105,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const handleKeyUpListener = (event:any) => handleKeyUp(event);
+    const handleKeyUpListener = (event: any) => handleKeyUp(event);
     document.addEventListener('keyup', handleKeyUpListener);
     return () => {
       document.removeEventListener('keyup', handleKeyUpListener);

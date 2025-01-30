@@ -13,3 +13,8 @@ body {
 .incorrect {
   color: red;
 }
+
+.extra {
+  color: red;
+  opacity: 0.5;
+}
